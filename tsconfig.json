@@ -17,7 +17,6 @@
     "noFallthroughCasesInSwitch": true,
     "noPropertyAccessFromIndexSignature": true,
     "strict": true,
-    "noUncheckedSideEffectImports": true,
     "skipLibCheck": true,
   }
 }

@@ -1,83 +1,72 @@
+// Constants
+const DEFAULT_SCALE = 100;
+
+// Interfaces
+class ProjectedCoordinates {
+  x: number;
+  y: number;
+  constructor(x:number, y:number){
+    this.x = x;
+    this.y = y;
+  }
+}
+
+// Classes
 class Vertex {
-  x: number;
-  y: number;
-  z: number;
+  constructor(public x = 0, public y = 0, public z = 0) {}
 
-  constructor(x = 0, y = 0, z = 0) {
-    this.x = x;
-    this.y = y;
-    this.z = z;
+  project(centerX: number, centerY: number, scale: number = DEFAULT_SCALE): ProjectedCoordinates {
+    const factor = camera.fov / (camera.fov + this.z);
+    return {
+      x: centerX + this.x * factor * scale,
+      y: centerY + this.y * factor * scale,
+    };
   }
 
-  projection(centerX:number, centerY:number, scale:number = 100): projectedCoordinates{
-    return new projectedCoordinates(centerX + (FOV * this.x) / (FOV + this.z) * scale, centerY + (FOV * this.y) / (FOV + this.z) * scale);
-  }  
-
-  rotate(rotation: number): Vertex {
-    return this.rotateX(rotation).rotateY(rotation);
+  rotate(): Vertex {
+    return this.rotateZ().rotateX().rotateY();
   }
 
-  private rotateX(rotation: number): Vertex {
-    return new Vertex (
-      this.x,
-      Math.cos(rotation) * this.y - Math.sin(rotation) * this.z,
-      Math.sin(rotation) * this.y + Math.cos(rotation) * this.z
-    )
-  }
-
-  private rotateY(rotation: number): Vertex {
+  private rotateX(): Vertex {
+    const cos = Math.cos(camera.rotationX);
+    const sin = Math.sin(camera.rotationX);
     return new Vertex(
-      Math.cos(rotation) * this.x - Math.sin(rotation) * this.z,
+      this.x,
+      cos * this.y - sin * this.z,
+      sin * this.y + cos * this.z
+    );
+  }
+
+  private rotateY(): Vertex {
+    const cos = Math.cos(camera.rotationY);
+    const sin = Math.sin(camera.rotationY);
+    return new Vertex(
+      cos * this.x + sin * this.z,
       this.y,
-      Math.sin(rotation) * this.x + Math.cos(rotation) * this.z
-    )
+      -(sin * this.x) + cos * this.z
+    );
+  }
+
+  private rotateZ(): Vertex {
+    const cos = Math.cos(camera.rotationZ);
+    const sin = Math.sin(camera.rotationZ);
+    return new Vertex(
+      cos * this.x - sin * this.y,
+      sin * this.x + cos * this.y,
+      this.z
+    );
   }
 }
 
-class projectedCoordinates{
-  x: number;
-  y: number;
-
-  constructor(x = 0, y = 0){
-    this.x = x;
-    this.y = y;
+class Triangle {
+  points: [Vertex, Vertex, Vertex];
+  constructor(p1: Vertex, p2: Vertex, p3: Vertex) {
+    this.points = [p1, p2, p3];
   }
 }
+
 
 class Edge {
-  start: number;
-  end: number;
-
-  constructor(start: number, end: number) {
-    this.start = start;
-    this.end = end;
-  }
+  constructor(public start: number, public end: number) {}
 }
 
-// TEST DATA CUBE
-const cubeVertices: Vertex[] = [
-  new Vertex(-1, -1, -1),
-  new Vertex(-1,  1, -1),
-  new Vertex( 1,  1, -1),
-  new Vertex( 1, -1, -1),
-
-  new Vertex(-1, -1, 1),
-  new Vertex(-1,  1, 1),
-  new Vertex( 1,  1, 1),
-  new Vertex( 1, -1, 1),
-];
-
-const cubeEdges: Edge[] = [
-  new Edge(0, 1), 
-  new Edge(0, 3),
-  new Edge(0, 4),
-  new Edge(1, 2),
-  new Edge(1, 5),
-  new Edge(2, 3),
-  new Edge(2, 6),
-  new Edge(3, 7),
-  new Edge(4, 5), 
-  new Edge(4, 7),
-  new Edge(5, 6),
-  new Edge(6, 7)
-];

@@ -1,15 +1,21 @@
-let context: CanvasRenderingContext2D;
+let renderer: Renderer;
+let camera: Camera;
+let teapot: Teapot;
 let windowWidth: number;
 let windowHeight: number;
-const FOV: number = 10;
-let lastTime:any = 0;
-let rotationNumber: number = 0;
+let lastTime = 0;
 
+
+let rowCubes: number = 1;
+let columnCubes: number = 1;
 
 document.addEventListener('DOMContentLoaded', () => {
- const canvas = document.getElementById('canvas');
-  if (!(canvas instanceof HTMLCanvasElement)) {
-    console.error("canvas element not found or is not a canvas!");
+
+  setUpEventHandlers();
+
+  const canvas = document.getElementById('canvas') as HTMLCanvasElement;
+  if (!canvas) {
+    console.error("Canvas element not found!");
     return;
   }
   canvas.width = window.innerWidth;
@@ -19,59 +25,53 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const ctx = canvas.getContext("2d");
   if (!ctx) {
-    console.error("could not get 2d context!");
+    console.error("Could not get 2d context!");
     return;
   }
-  context = ctx;
+  renderer = new Renderer(ctx);
+  camera = new Camera(0,0,0);
 
-  let rotation = 0;
-  render(rotation);
+  teapot = new Teapot();
+  cube1 = new Cube(200, 300, 400);
+
+  requestAnimationFrame(render);
 });
 
-function render(currentTime: any) {
-  context.clearRect(0, 0, windowWidth, windowHeight);
-  
-  // Calculate delta time for smooth animation
+let cube1: Cube;
+
+function render(currentTime: number) {
+  camera.moveCamera();
+  renderer.clear(windowWidth, windowHeight);
+
   if (lastTime === 0) lastTime = currentTime;
-  const deltaTime = (currentTime - lastTime) / 1000;
+  // const deltaTime = (currentTime - lastTime) / 1000;
   lastTime = currentTime;
 
-  renderSpinningCube(deltaTime);
+
+  let centerX = windowWidth / 2;
+  let centerY = windowHeight / 2;
+  // DRAW Cube center
+  cube1.drawAt(windowWidth / 2, windowHeight/2);
+
+  //DRAW TEAPOT
+  teapot.drawAt(centerX, centerY);
+
 
   requestAnimationFrame(render);
 }
 
 
-function renderSpinningCube(deltaTime: number){
-  
-  rotationNumber += 0.5 * deltaTime;
+function getGridCenterPoints(rowItems: number, columnItems:number): ProjectedCoordinates[] {
+  let rowStep = windowHeight / (rowItems + 1);
+  let columnStep = windowWidth / (columnItems + 1);
 
-  let rotation = rotationNumber; 
+  let resultArray: ProjectedCoordinates[] = [];
 
-  const centerX = windowWidth /2;
-  const centerY = windowHeight/2;
-
-  cubeEdges.forEach(element => {
-
-    let point1 = cubeVertices[element.start]!.rotate(rotation).projection(centerX, centerY);
-    let point2 = cubeVertices[element.end]!.rotate(rotation).projection(centerX, centerY);
-
-    drawLine(point1, point2);
-    drawPoint(point1);
-    drawPoint(point2);
-  });
+  for (let rowIndex = 1; rowIndex <= rowItems; rowIndex++) {
+   for (let columnIndex = 1; columnIndex <= columnItems; columnIndex++) {
+      resultArray.push(new ProjectedCoordinates(columnStep * columnIndex, rowStep* rowIndex));
+   } 
+  } 
+  return resultArray;
 }
 
-
-function drawLine(point1: projectedCoordinates, point2: projectedCoordinates) {
-  context.beginPath();
-  context.moveTo(point1.x, point1.y);
-  context.lineTo(point2.x, point2.y);
-  context.stroke();
-}
-
-function drawPoint(point: projectedCoordinates) {
-  context.beginPath();
-  context.arc(point.x, point.y, 5, 0, 2 * Math.PI);
-  context.fill();
-}
