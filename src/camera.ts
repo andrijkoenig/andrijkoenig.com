@@ -29,10 +29,16 @@ class Camera {
     moveCamera(){
         if(Key.W) this.rotationZ -= 0.01;
         if(Key.S) this.rotationZ += 0.01;
-        if(Key.A) this.rotationX -= 0.01;
-        if(Key.D) this.rotationX += 0.01;
-        if(Key.E) this.rotationY -= 0.01;
-        if(Key.Q) this.rotationY += 0.01;
+        if(Key.A) this.rotationY -= 0.01;
+        if(Key.D) this.rotationY += 0.01;
+        if(Key.E) this.rotationX -= 0.01;
+        if(Key.Q) this.rotationX += 0.01;
+        
+
+        if(Key.u) this.y += 10;
+        if(Key.d) this.y -= 10;
+        if(Key.l) this.x += 10;
+        if(Key.r) this.x -= 10;
     }
 
 }

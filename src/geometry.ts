@@ -1,5 +1,4 @@
 // Constants
-const DEFAULT_SCALE = 100;
 
 // Interfaces
 class ProjectedCoordinates {
@@ -15,16 +14,16 @@ class ProjectedCoordinates {
 class Vertex {
   constructor(public x = 0, public y = 0, public z = 0) {}
 
-  project(centerX: number, centerY: number, scale: number = DEFAULT_SCALE): ProjectedCoordinates {
+  project(centerX: number, centerY: number): ProjectedCoordinates {
     const factor = camera.fov / (camera.fov + this.z);
     return {
-      x: centerX + this.x * factor * scale,
-      y: centerY + this.y * factor * scale,
+      x: centerX + this.x * factor ,
+      y: centerY + this.y * factor ,
     };
   }
 
-  rotate(): Vertex {
-    return this.rotateZ().rotateX().rotateY();
+  AddCameraMovement(): Vertex{
+    return new Vertex(this.x + camera.x, this.y + camera.y, this.z + camera.z).rotateZ().rotateX().rotateY();
   }
 
   private rotateX(): Vertex {

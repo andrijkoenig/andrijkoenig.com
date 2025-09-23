@@ -39,8 +39,8 @@ class Cube {
 
   drawAt(x: number, y: number) {
     this.edges.forEach((edge) => {
-      const p1 = this.vertices[edge.start]!.rotate().project(x, y);
-      const p2 = this.vertices[edge.end]!.rotate().project(x, y);
+      const p1 = this.vertices[edge.start]!.AddCameraMovement().project(x, y);
+      const p2 = this.vertices[edge.end]!.AddCameraMovement().project(x, y);
       renderer.drawLine(p1, p2);
       renderer.drawPoint(p1);
       renderer.drawPoint(p2);

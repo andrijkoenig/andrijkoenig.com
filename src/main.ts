@@ -31,8 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
   renderer = new Renderer(ctx);
   camera = new Camera(0,0,0);
 
-  teapot = new Teapot();
-  cube1 = new Cube(200, 300, 400);
+  teapot = new Teapot(4);
+  cube1 = new Cube(0,0,0);
 
   requestAnimationFrame(render);
 });

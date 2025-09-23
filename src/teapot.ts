@@ -1,15 +1,15 @@
 class Teapot {
   data: Triangle[];
 
-  constructor() {
+  constructor(private scale = 1) {
     this.data = this.loadTeapot();
   }
 
   drawAt(x: number, y: number) {
     this.data.forEach((element) => {
-      let p1 = element.points[0].rotate().project(x, y);
-      let p2 = element.points[1].rotate().project(x, y);
-      let p3 = element.points[2].rotate().project(x, y);
+      let p1 = element.points[0].AddCameraMovement().project(x, y);
+      let p2 = element.points[1].AddCameraMovement().project(x, y);
+      let p3 = element.points[2].AddCameraMovement().project(x, y);
 
       renderer.drawLine(p1, p2);
       renderer.drawLine(p2, p3);
@@ -47,6 +47,6 @@ class Teapot {
     const x = Number(parts[0]);
     const y = Number(parts[1]);
     const z = Number(parts[2]);
-    return new Vertex(x, y, z);
+    return new Vertex(x * this.scale, y * this.scale, z * this.scale);
   }
 }
