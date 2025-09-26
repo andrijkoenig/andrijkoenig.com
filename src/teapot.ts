@@ -7,9 +7,9 @@ class Teapot {
 
   drawAt(x: number, y: number) {
     this.data.forEach((element) => {
-      let p1 = element.points[0].AddCameraMovement().project(x, y);
-      let p2 = element.points[1].AddCameraMovement().project(x, y);
-      let p3 = element.points[2].AddCameraMovement().project(x, y);
+      let p1 = element.points[0].project(x, y);
+      let p2 = element.points[1].project(x, y);
+      let p3 = element.points[2].project(x, y);
 
       renderer.drawLine(p1, p2);
       renderer.drawLine(p2, p3);

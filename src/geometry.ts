@@ -1,6 +1,3 @@
-// Constants
-
-// Interfaces
 class ProjectedCoordinates {
   x: number;
   y: number;
@@ -12,23 +9,24 @@ class ProjectedCoordinates {
 
 // Classes
 class Vertex {
-  constructor(public x = 0, public y = 0, public z = 0) {}
+  constructor(public x = 0, public y = 0, public z = 0) {
+  }
 
   project(centerX: number, centerY: number): ProjectedCoordinates {
     const factor = camera.fov / (camera.fov + this.z);
     return {
       x: centerX + this.x * factor ,
-      y: centerY + this.y * factor ,
+      y: centerY + -this.y * factor ,
     };
   }
 
-  AddCameraMovement(): Vertex{
-    return new Vertex(this.x + camera.x, this.y + camera.y, this.z + camera.z).rotateZ().rotateX().rotateY();
+  AddCameraMovement(xRotationScale: number, yRotationScale: number): Vertex{
+    return this.rotateZ().rotateX(xRotationScale).rotateY(yRotationScale);
   }
 
-  private rotateX(): Vertex {
-    const cos = Math.cos(camera.rotationX);
-    const sin = Math.sin(camera.rotationX);
+  private rotateX(angle:number): Vertex {
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
     return new Vertex(
       this.x,
       cos * this.y - sin * this.z,
@@ -36,9 +34,9 @@ class Vertex {
     );
   }
 
-  private rotateY(): Vertex {
-    const cos = Math.cos(camera.rotationY);
-    const sin = Math.sin(camera.rotationY);
+  private rotateY(angle:number): Vertex {
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
     return new Vertex(
       cos * this.x + sin * this.z,
       this.y,
@@ -64,8 +62,7 @@ class Triangle {
   }
 }
 
-
 class Edge {
-  constructor(public start: number, public end: number) {}
+  constructor(public start: number, public end: number, public color:string = "#FFF") {}
 }
 

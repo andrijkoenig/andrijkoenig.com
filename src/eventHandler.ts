@@ -1,26 +1,8 @@
-function setUpEventHandlers() {
-  setUpButton("increaseRow", () => {
-    rowCubes++;
-    updateRowText();
-  });
-
-  setUpButton("decreaseRow", () => {
-    rowCubes--;
-    updateRowText();
-  });
-
-  setUpButton("increaseColumn", () => {
-    columnCubes++;
-    updateColumnText();
-  });
-
-  setUpButton("decreaseColumn", () => {
-    columnCubes--;
-    updateColumnText();
-  });
-
-  setUpKeyboardListener();
-}
+window.addEventListener("resize", () => {
+  initializeCanvas();
+  // RECALCULATE DRAWING POSITIONS
+  drawArray = initializeDrawArray();
+});
 
 function setUpButton(buttonId: string, func: () => any) {
   const countBtn = document.getElementById(buttonId);
@@ -31,15 +13,6 @@ function setUpButton(buttonId: string, func: () => any) {
   countBtn.addEventListener("click", func);
 }
 
-function updateRowText() {
-  const rowCount = document.getElementById("rowCount");
-  if (rowCount) rowCount.textContent = rowCubes.toString();
-}
-
-function updateColumnText() {
-  const columnCount = document.getElementById("columnCount");
-  if (columnCount) columnCount.textContent = columnCubes.toString();
-}
 const Key = {
     r: false,
     l: false,
