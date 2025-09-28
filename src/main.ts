@@ -1,5 +1,4 @@
 let renderer: Renderer;
-let camera: Camera;
 
 let windowWidth: number;
 let windowHeight: number;
@@ -9,18 +8,14 @@ let possibleRenderItems: (() => Shape)[] = [
   () => new Cube(100, 100, 100),
   () => new Tetrahedron(0, 0, 0, 100),
   () => new Pyramid(0, 0, 0, 100, 120),
-  // () => new Octahedron(0, 0, 0, 80),
-  // () => new Prism(0, 0, 0),
-  // () => new Sphere(0, 0, 0, 80, 12, 12),
 ];
 
 let drawArray: Array<DrawItem>;
+let rotationXScale = 0.005;
+let rotationYScale = 0.005;
 
 class DrawItem {
   angle: number;
-
-  rotationYScale: number;
-  rotationXScale: number;
 
   rotationYAngle: number;
   rotationXAngle: number;
@@ -29,16 +24,14 @@ class DrawItem {
     public screenPosition: ProjectedCoordinates
   ) {
     this.angle = 0;
-    this.rotationXScale = Math.random();
-    this.rotationYScale = Math.random();
 
-    this.rotationXAngle =0 ;
-    this.rotationYAngle =0 ;
+    this.rotationXAngle = 0;
+    this.rotationYAngle = 0;
   }
 
-  calculateNewAngles(deltaTime : number){
-    this.rotationXAngle+= this.rotationXScale *deltaTime;
-    this.rotationYAngle+= this.rotationYScale *deltaTime;
+  calculateNewAngles() {
+    this.rotationXAngle += rotationXScale;
+    this.rotationYAngle += rotationYScale;
   }
 }
 
@@ -54,44 +47,19 @@ function render(currentTime: number) {
   const deltaTime = (currentTime - lastTime) / 1000;
   lastTime = currentTime;
 
-  drawArray = moveInCircle(
-    drawArray,
-    deltaTime,
-    5,
-    2
-  );
+   const scale = 0.01 * deltaTime;
+    if (Key.A) rotationXScale -= scale;
+    if (Key.D) rotationXScale += scale;
+    if (Key.W) rotationYScale -= scale;
+    if (Key.S) rotationYScale += scale;
 
-  camera.moveCamera();
-
-  drawArray.forEach((element: DrawItem) =>
-  {
-    element.calculateNewAngles(deltaTime);
+  drawArray.forEach((element: DrawItem) => {
+    element.calculateNewAngles();
     element.shape.drawAt(element);
-  }
-  );
+  });
   requestAnimationFrame(render);
 }
 
-function moveInCircle(
-  drawArray: Array<DrawItem>,
-  deltaTime: number,
-  revolutionTime: number,
-  radius: number,
-): Array<DrawItem> {
-  const angularVelocity = (2 * Math.PI) / revolutionTime;
-
-  drawArray.forEach((item) => {
-    // Update angle
-    item.angle += angularVelocity * deltaTime;
-    if (item.angle > Math.PI * 2) item.angle -= Math.PI * 2;
-
-    // Update position
-    item.screenPosition.x = item.screenPosition.x + Math.cos(item.angle) * radius;
-    item.screenPosition.y = item.screenPosition.y + Math.sin(item.angle) * radius;
-  });
-
-  return drawArray;
-}
 function initializeDrawArray(): Array<DrawItem> {
   return calculateDrawingPositions().map((x, index) => {
     const wrappedIndex = index % possibleRenderItems.length;
@@ -106,17 +74,18 @@ function initializeDrawArray(): Array<DrawItem> {
 function calculateDrawingPositions(): ProjectedCoordinates[] {
   let resultArray: ProjectedCoordinates[] = [];
 
-  let padding = 250;
+  let padding = 750;
+  let itemPadding = 250;
 
   for (
-    let rowIndex = -250;
-    rowIndex <= windowHeight + 250;
-    rowIndex += padding
+    let rowIndex = -padding;
+    rowIndex <= windowHeight + padding;
+    rowIndex += itemPadding
   ) {
     for (
-      let columnIndex = -250;
-      columnIndex <= windowWidth + 250;
-      columnIndex += padding
+      let columnIndex = -padding;
+      columnIndex <= windowWidth + padding;
+      columnIndex += itemPadding
     ) {
       resultArray.push(new ProjectedCoordinates(columnIndex, rowIndex));
     }
@@ -133,8 +102,6 @@ function initializeGlobalVariables() {
   let context = initialize2dDrawingContext(canvas);
   if (!context) return;
   renderer = new Renderer(context);
-  camera = new Camera();
-
   drawArray = initializeDrawArray();
 }
 
@@ -162,9 +129,4 @@ function initializeCanvas(): HTMLCanvasElement | null {
   windowHeight = window.innerHeight;
 
   return canvas;
-}
-
-function getRandomShape(): Shape {
-  const idx = Math.floor(Math.random() * possibleRenderItems.length);
-  return possibleRenderItems[idx]!();
 }

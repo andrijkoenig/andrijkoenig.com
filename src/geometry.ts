@@ -7,13 +7,12 @@ class ProjectedCoordinates {
   }
 }
 
-// Classes
 class Vertex {
   constructor(public x = 0, public y = 0, public z = 0) {
   }
 
   project(centerX: number, centerY: number): ProjectedCoordinates {
-    const factor = camera.fov / (camera.fov + this.z);
+    const factor = 500 / (500 + this.z);
     return {
       x: centerX + this.x * factor ,
       y: centerY + -this.y * factor ,
@@ -21,7 +20,7 @@ class Vertex {
   }
 
   AddCameraMovement(xRotationScale: number, yRotationScale: number): Vertex{
-    return this.rotateZ().rotateX(xRotationScale).rotateY(yRotationScale);
+    return this.rotateX(xRotationScale).rotateY(yRotationScale);
   }
 
   private rotateX(angle:number): Vertex {
@@ -41,16 +40,6 @@ class Vertex {
       cos * this.x + sin * this.z,
       this.y,
       -(sin * this.x) + cos * this.z
-    );
-  }
-
-  private rotateZ(): Vertex {
-    const cos = Math.cos(camera.rotationZ);
-    const sin = Math.sin(camera.rotationZ);
-    return new Vertex(
-      cos * this.x - sin * this.y,
-      sin * this.x + cos * this.y,
-      this.z
     );
   }
 }
