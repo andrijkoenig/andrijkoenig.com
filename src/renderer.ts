@@ -1,17 +1,15 @@
 class Renderer {
-  private white: string = "#999";
-  private black: string = "#000";
   constructor(private context: CanvasRenderingContext2D) {}
 
   clear(width: number, height: number) {
-    this.context.fillStyle = this.black;
+    this.context.fillStyle = RENDER_COLORS.black;
     this.context.fillRect(0, 0, width, height);
   }
 
   drawLine(
     p1: ProjectedCoordinates,
     p2: ProjectedCoordinates,
-    color: string = this.white
+    color: string = RENDER_COLORS.white
   ) {
     this.context.strokeStyle = color;
     this.context.beginPath();
@@ -21,12 +19,28 @@ class Renderer {
   }
 
   drawPoint(p: ProjectedCoordinates) {
-    this.context.strokeStyle = this.white;
-    this.context.fillStyle = this.white;
+    this.context.strokeStyle = RENDER_COLORS.white;
+    this.context.fillStyle = RENDER_COLORS.white;
     this.context.beginPath();
     this.context.arc(p.x, p.y, 5, 0, 2 * Math.PI);
     this.context.fill();
   }
+  
+  drawText(text:TerminalText, x: number, y:number): TextMetrics {
+    this.context.fillStyle = text.color;
+    this.context.font = "48px monospace";
+    this.context.fillText(text.text, x, y);
+
+    return this.context.measureText(text.text);
+  }
+}
+
+const RENDER_COLORS ={
+  t_light_green: "#0fdb3f",
+  t_dark_green: "#11822c",
+  black: "#000",
+  white: "#FFF",
+  red: "#F44",
 }
 
 function getRandomColor(): string {

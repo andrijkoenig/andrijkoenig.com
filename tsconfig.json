@@ -3,7 +3,7 @@
     "rootDir": "./src",
     "outFile": "./dist/script.js",
     "module": "none",
-    "target": "es6",
+    "target": "es2017",
     "types": [],
     "sourceMap": false,
     "declaration": false,

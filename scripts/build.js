@@ -3,6 +3,7 @@ const path = require('path');
 const { minify } = require('html-minifier-terser');
 
 const srcDir = path.join(__dirname, '../src');
+const publicDir = path.join(__dirname, '../public');
 const distDir = path.join(__dirname, '../dist');
 
 const css = ReadFile(distDir, 'styles.css');
@@ -22,9 +23,8 @@ minify(htmlContent, {
 }).then(minifiedHtml => {
     WriteFile(distDir, 'index.html', minifiedHtml);
 });
-
-// Copy Teapot.tris
-CopyFile(srcDir, 'teapot.tris', distDir, 'teapot.tris');
+// Copy public dir
+CopyDir(publicDir,distDir);
 
 // Cleanup
 DeleteFile(distDir, 'script.js');
@@ -46,5 +46,20 @@ function CopyFile(srcFolder, srcFile, destFolder, destFile) {
         path.join(srcFolder, srcFile),
         path.join(destFolder, destFile)
     );
+}
+function CopyDir(src, dest) {
+  if (!fs.existsSync(dest)) {
+    fs.mkdirSync(dest, { recursive: true });
+  }
+  const entries = fs.readdirSync(src, { withFileTypes: true });
+  for (let entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+    if (entry.isDirectory()) {
+      CopyDir(srcPath, destPath);
+    } else {
+      fs.copyFileSync(srcPath, destPath);
+    }
+  }
 }
 
