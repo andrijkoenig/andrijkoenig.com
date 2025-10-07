@@ -13,16 +13,21 @@ jobs:
       # checkout
       - uses: actions/checkout@v3
 
-      # build
-      - name: npm install 
-        uses: actions/setup-node@v4
-      - run: npm install
+      # setup Node.js
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '18'
 
+      # install dependencies
+      - name: Install dependencies
+        run: npm install
+
+      # build project
       - name: Build project
-      - run: npm run build
+        run: npm run build
 
       # deploy
-      - name: deploy
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
