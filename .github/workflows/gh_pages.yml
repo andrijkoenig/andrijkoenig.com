@@ -14,10 +14,11 @@ jobs:
       - uses: actions/checkout@v3
 
       # build
-      - name: npm install & build
+      - name: npm install 
         uses: actions/setup-node@v4
       - run: npm install
-      - run: npm rebuild @parcel/watcher
+
+      - name: Build project
       - run: npm run build
 
       # deploy
