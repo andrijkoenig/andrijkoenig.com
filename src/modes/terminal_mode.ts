@@ -22,10 +22,6 @@ function CalcMaxTerminalHistoryItems() {
 function initializeTerminalMode() {
   if(!terminalHistory){
     terminalHistory = [];
-    terminalHistory.push(new TerminalText("Welcome to my page!!"));
-    terminalHistory.push(new LineBreak());
-    terminalHistory.push(new TerminalText("Type help to get an overview"));
-    terminalHistory.push(new LineBreak());
   }
   CalcMaxTerminalHistoryItems();
   terminalEventListeners.forEach((x) => window.addEventListener("keydown", x));
@@ -119,6 +115,7 @@ const commands: Record<string, (userInput: any) => void> = {
   ["about"]: command_about,
   ["screensaver"]: command_screensaver,
   ["teapot"]: command_teapot,
+  ["banner"]: command_banner,
 };
 
 function evalCommand() {

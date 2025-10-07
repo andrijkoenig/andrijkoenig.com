@@ -102,3 +102,27 @@ function command_teapot(input: any) {
   ActivateTeapotMode();
   input;
 }
+
+
+function command_banner(){
+terminalHistory.push(new TerminalText(`                                                           `));
+  terminalHistory.push(new LineBreak());
+terminalHistory.push(new TerminalText(`    mm                     mm               ##        ##   `));
+  terminalHistory.push(new LineBreak());
+terminalHistory.push(new TerminalText(`   ####                    ##               ""        ""   `));
+  terminalHistory.push(new LineBreak());
+terminalHistory.push(new TerminalText(`   ####    ##m####m   m###m##   ##m####   ####      ####   `));
+  terminalHistory.push(new LineBreak());
+terminalHistory.push(new TerminalText(`  ##  ##   ##"   ##  ##"  "##   ##"         ##        ##   `));
+  terminalHistory.push(new LineBreak());
+terminalHistory.push(new TerminalText(`  ######   ##    ##  ##    ##   ##          ##        ##   `));
+  terminalHistory.push(new LineBreak());
+terminalHistory.push(new TerminalText(` m##  ##m  ##    ##  "##mm###   ##       mmm##mmm     ##   `));
+  terminalHistory.push(new LineBreak());
+terminalHistory.push(new TerminalText(` ""    ""  ""    ""    """ ""   ""       """"""""     ##   `));
+  terminalHistory.push(new LineBreak());
+terminalHistory.push(new TerminalText(`                                                   ####"   `));
+  terminalHistory.push(new LineBreak());
+                                                                                                                        
+                                                                                                                                                      
+}
