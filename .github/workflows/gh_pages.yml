@@ -1,0 +1,27 @@
+name: Deploy GH Pages
+
+on:
+  push: 
+    branches: [ "main" ]
+  workflow_dispatch: 
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # checkout
+      - uses: actions/checkout@v3
+
+      # build
+      - name: npm install & build
+        uses: actions/setup-node@v4
+      - run: npm install
+      - run: npm run build
+
+      # deploy
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
