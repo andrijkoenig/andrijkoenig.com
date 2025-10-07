@@ -17,6 +17,7 @@ jobs:
       - name: npm install & build
         uses: actions/setup-node@v4
       - run: npm install
+      - run: npm rebuild @parcel/watcher
       - run: npm run build
 
       # deploy
