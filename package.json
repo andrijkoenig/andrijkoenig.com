@@ -1,9 +1,10 @@
 {
   "scripts": {
-    "build:css": "tailwindcss -i ./src/styles.css -o ./dist/styles.css",
+    "build:css": "tailwindcss -i ./src/styles.css -o ./dist/styles.css --minify",
     "build:ts": "tsc",
     "build": "npm run build:css && npm run build:ts &&  node scripts/build.js"
   },
+  "type": "module",
   "dependencies": {
     "@tailwindcss/cli": "^4.1.13",
     "csso": "^5.0.5",

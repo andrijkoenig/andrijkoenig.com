@@ -1,9 +1,9 @@
 class Renderer {
   constructor(private context: CanvasRenderingContext2D) {}
 
-  clear(width: number, height: number) {
-    this.context.fillStyle = RENDER_COLORS.black;
-    this.context.fillRect(0, 0, width, height);
+  clear() {
+    this.context.fillStyle = RENDER_COLORS.background;
+    this.context.fillRect(0, 0, windowWidth, windowHeight);
   }
 
   drawLine(
@@ -11,6 +11,7 @@ class Renderer {
     p2: ProjectedCoordinates,
     color: string = RENDER_COLORS.white
   ) {
+    this.context.shadowBlur = 0;
     this.context.strokeStyle = color;
     this.context.beginPath();
     this.context.moveTo(p1.x, p1.y);
@@ -27,8 +28,11 @@ class Renderer {
   }
   
   drawText(text:TerminalText, x: number, y:number): TextMetrics {
+    this.context.shadowColor = text.color;
+    this.context.shadowBlur = 10;
+
     this.context.fillStyle = text.color;
-    this.context.font = "48px monospace";
+    this.context.font = "26px monospace";
     this.context.fillText(text.text, x, y);
 
     return this.context.measureText(text.text);
@@ -36,11 +40,23 @@ class Renderer {
 }
 
 const RENDER_COLORS ={
-  t_light_green: "#0fdb3f",
-  t_dark_green: "#11822c",
+  t_light_green: "#00ff00",
+  t_dark_green: "#0a640a",
   black: "#000",
   white: "#FFF",
   red: "#F44",
+  background: "#000",
+  yellow: "#FFFF00",           // bright yellow
+  orange: "#FFAA00",           // amber/orange glow
+  cyan: "#00FFFF",             // neon cyan
+  magenta: "#FF00FF",          // hot pink / magenta
+  blue: "#0099FF",             // retro blue
+  purple: "#9900FF",           // deep retro purple
+  pink: "#FF77FF",             // softer neon pink
+  gray: "#888888",             // neutral gray for dividers
+  t_orange: "#FF8800",         // terminal-style orange
+  t_light_blue: "#33CCFF",     // light neon blue
+  t_dark_cyan: "#008888"       // dark retro cyan
 }
 
 function getRandomColor(): string {

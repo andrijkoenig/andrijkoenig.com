@@ -20,7 +20,7 @@ class Vertex {
   }
 
   AddCameraMovement(xRotationScale: number, yRotationScale: number): Vertex{
-    return this.rotateX(xRotationScale).rotateY(yRotationScale);
+    return this.rotateX(xRotationScale).rotateZ(yRotationScale);
   }
 
   private rotateX(angle:number): Vertex {
@@ -33,13 +33,23 @@ class Vertex {
     );
   }
 
-  private rotateY(angle:number): Vertex {
+  // private rotateY(angle:number): Vertex {
+  //   const cos = Math.cos(angle);
+  //   const sin = Math.sin(angle);
+  //   return new Vertex(
+  //     cos * this.x + sin * this.z,
+  //     this.y,
+  //     -(sin * this.x) + cos * this.z
+  //   );
+  // }
+
+  private rotateZ(angle:number): Vertex {
     const cos = Math.cos(angle);
     const sin = Math.sin(angle);
     return new Vertex(
-      cos * this.x + sin * this.z,
-      this.y,
-      -(sin * this.x) + cos * this.z
+      cos * this.x - sin * this.y,
+      sin * this.x + cos * this.y,
+      this.z
     );
   }
 }

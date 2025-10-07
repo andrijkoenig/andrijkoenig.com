@@ -12,7 +12,6 @@ let geometryEventListeners: ((event: KeyboardEvent) => void)[] = [
 
 
 function initializeGeometryMode(){
-
   drawArray = initializeDrawArray();
   geometryEventListeners.forEach((x)=> window.addEventListener("keydown", x));
 }
@@ -28,8 +27,11 @@ let possibleRenderItems: (() => Shape)[] = [
   () => new Pyramid(0, 0, 0, 100, 120),
 ];
 
-function RenderScreenSaverMode(deltaTime: number){
-  const scale = 0.01 * deltaTime;
+function RenderScreenSaverMode(deltaTimeInMs: number){
+  if(needNewFrame(deltaTimeInMs) == false) return;
+  renderer.clear();
+
+  const scale = 0.001;
   if (Key.A) rotationXScale -= scale;
   if (Key.D) rotationXScale += scale;
   if (Key.W) rotationYScale -= scale;
@@ -39,6 +41,23 @@ function RenderScreenSaverMode(deltaTime: number){
     element.calculateNewAngles();
     element.shape.drawAt(element);
   });
+}
+
+let teapot: Teapot;
+let rotateXTeapot: number = 0;
+let rotateYTeapot: number = 0;
+
+function RenderTeapotMode(deltaTimeInMs: number){
+  if(needNewFrame(deltaTimeInMs) == false) return;
+  renderer.clear();
+  if(!teapot) teapot = new Teapot(100);
+ 
+  if (Key.W) rotateXTeapot += 0.05;
+  if (Key.S) rotateXTeapot -= 0.05;
+  if (Key.D) rotateYTeapot += 0.05;
+  if (Key.A) rotateYTeapot -= 0.05;
+
+  teapot.drawAt(windowWidth/ 2, windowHeight/2, rotateXTeapot, rotateYTeapot);
 }
 
 class DrawItem {

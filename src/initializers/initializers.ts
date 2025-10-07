@@ -1,9 +1,6 @@
-
-
-
 function initialize() {
   setUpKeyboardListener();
-
+  updateCopyright();
   let canvas = initializeCanvas();
   if (!canvas) return;
 
@@ -37,3 +34,17 @@ function initializeCanvas(): HTMLCanvasElement | null {
 
   return canvas;
 }
+
+function updateCopyright(){
+  const element = document.getElementById("currentYear");
+  var time = new Date(Date.now());
+  element!.innerHTML = time.getFullYear().toString();
+}
+
+function setInfoBox(text:string= "Press Ctrl + C to exit"){
+  const element = document.getElementById("infobox");
+  if (!element)return ;
+  element!.innerHTML = text;
+}
+
+

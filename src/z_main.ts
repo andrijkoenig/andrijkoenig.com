@@ -2,6 +2,7 @@ let renderer: Renderer;
 let windowWidth: number;
 let windowHeight: number;
 let lastTime = 0;
+let currentTime = 0;
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -10,14 +11,22 @@ document.addEventListener("DOMContentLoaded", () => {
   requestAnimationFrame(render);
 });
 
-function render(currentTime: number) {
-  renderer.clear(windowWidth, windowHeight);
+function render(time: number) {
 
-  if (lastTime === 0) lastTime = currentTime;
-  const deltaTime = (currentTime - lastTime) / 1000;
-  lastTime = currentTime;
+  currentTime = time || performance.now();
+  const deltaTime = (currentTime - lastTime);
+  
   renderers[currentMode]?.(deltaTime);
   requestAnimationFrame(render);
+}
+
+function needNewFrame(deltaTime:number) :boolean{
+  const frameDuration = 1000 / 30;
+  if (deltaTime >= frameDuration) {
+      lastTime = currentTime - (deltaTime % frameDuration);
+      return true;
+  }
+  return false;
 }
 
 
