@@ -22,8 +22,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Rebuild @parcel/watcher
-        run: npm rebuild @parcel/watcher
+      - name: Install TailwindCss
+        run: npm install tailwindcss @tailwindcss/cli
 
       # build project
       - name: Build project
